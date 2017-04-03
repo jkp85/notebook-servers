@@ -17,6 +17,8 @@ after_script:
   - docker push 3blades/base-notebook:latest
   - docker build -t 3blades/minimal-notebook minimal-notebook/.
   - docker push 3blades/minimal-notebook:latest
+  #- docker build -t 3blades/minimal-notebook minimal-notebook/.
+  #- docker push 3blades/minimal-notebook:latest
   #- docker build -t 3blades/scipy-notebook scipy-notebook/.
   #- docker push 3blades/scipy-notebook:latest
   #- docker build -t 3blades/r-notebook r-notebook/.
