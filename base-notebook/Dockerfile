@@ -27,7 +27,8 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 
 # Install Jupyter notebook
 RUN conda install --quiet --yes \
-    'notebook=4.2*' \
+    'notebook=4.4.*' \
+    'jupyterlab=0.17.*' \
     && conda clean -tipsy
 
 # Add a notebook profile.
