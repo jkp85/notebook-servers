@@ -18,9 +18,9 @@ RUN apt-get update && \
 # R packages
 RUN conda config --add channels r && \
     conda install --quiet --yes \
-    'r-base=3.2*' \
-    'r-irkernel=0.5*' \
-    'r-ggplot2=1.0*' \
+    'r-base=3.3.2' \
+    'r-irkernel=0.7*' \
+    'r-ggplot2=2.2*' \
     'r-rcurl=1.95*' && conda clean -tipsy
 
 ADD serve /
