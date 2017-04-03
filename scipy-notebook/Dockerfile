@@ -87,5 +87,3 @@ RUN pip install kernda --no-cache && \
     $CONDA_DIR/envs/python2/bin/python -m ipykernel install && \
     kernda -o -y /usr/local/share/jupyter/kernels/python2/kernel.json && \
     pip uninstall kernda -y
-
-ADD serve /

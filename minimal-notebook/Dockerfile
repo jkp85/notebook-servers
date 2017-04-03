@@ -32,10 +32,3 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
 RUN pip install --upgrade pip
 # https://github.com/ContinuumIO/anaconda-issues/issues/542
 RUN pip install -q --upgrade --ignore-installed pip wheel setuptools
-RUN pip install \
-    psycopg2 \
-    pymongo \
-    cassandra-driver \
-    mysqlclient
-
-ADD serve /

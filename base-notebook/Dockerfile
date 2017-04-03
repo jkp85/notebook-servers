@@ -1,5 +1,5 @@
-# Debian Jessie
-FROM ubuntu:16.04
+# Core server based on Ubuntu Xenial (16.04)
+FROM 3blades/core-server
 
 MAINTAINER 3Blades <contact@3blades.io>
 
@@ -9,12 +9,6 @@ USER root
 # features (e.g., download as all possible file formats)
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -yq --no-install-recommends \
-    build-essential \
-    wget \
-    bzip2 \
-    ca-certificates \
-    libpq-dev \
-    libmysqlclient-dev \
     python-dev \
     python3-dev \
     python-pip \
@@ -30,25 +24,6 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
     echo "1361527f39190a7338a0b434bd8c88ff7233ce7b9a4876f3315c22fce7eca1b0 *tini" | sha256sum -c - && \
     mv tini /usr/local/bin/tini && \
     chmod +x /usr/local/bin/tini
-
-# Configure environment
-ENV CONDA_DIR /opt/conda
-ENV PATH $CONDA_DIR/bin:$PATH
-ENV SHELL /bin/bash
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
-
-# Install conda
-RUN cd /tmp && \
-    mkdir -p $CONDA_DIR && \
-    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh && \
-    echo "c59b3dd3cad550ac7596e0d599b91e75d88826db132e4146030ef471bb434e9a *Miniconda3-4.2.12-Linux-x86_64.sh" | sha256sum -c - && \
-    /bin/bash Miniconda3-4.2.12-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
-    rm Miniconda3-4.2.12-Linux-x86_64.sh && \
-    $CONDA_DIR/bin/conda install --quiet --yes conda==4.2.12 && \
-    $CONDA_DIR/bin/conda config --system --add channels conda-forge && \
-    conda clean -tipsy
 
 # Install Jupyter notebook
 RUN conda install --quiet --yes \
@@ -75,6 +50,3 @@ CMD ["start-notebook.sh"]
 # Add local files as late as possible to avoid cache busting
 COPY start-notebook.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start-notebook.sh
-ENV container server=="workspace"
-
-ADD serve /

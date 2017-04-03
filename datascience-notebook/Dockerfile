@@ -54,5 +54,3 @@ RUN echo "push!(Libdl.DL_LOAD_PATH, \"$CONDA_DIR/lib\")" > /root/.juliarc.jl && 
 
 # Precompile Julia pakcages
 RUN julia -e 'using IJulia' && julia -e 'using Gadfly' && julia -e 'using RDatasets'&& julia -e 'using HDF5'
-
-ADD serve /

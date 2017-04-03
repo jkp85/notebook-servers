@@ -23,4 +23,10 @@ RUN conda config --add channels r && \
     'r-ggplot2=2.2*' \
     'r-rcurl=1.95*' && conda clean -tipsy
 
-ADD serve /
+# Apache Toree kernel
+RUN pip --no-cache-dir install https://dist.apache.org/repos/dist/dev/incubator/toree/0.2.0/snapshots/dev1/toree-pip/toree-0.2.0.dev1.tar.gz
+RUN jupyter toree install --sys-prefix
+
+Spylon-kernel
+RUN conda install --quiet --yes 'spylon-kernel=0.2*'
+RUN python -m spylon_kernel install --sys-prefix
