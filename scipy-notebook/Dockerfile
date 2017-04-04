@@ -12,58 +12,78 @@ RUN apt-get update && \
 
 # Install Python 3 packages
 RUN conda install --quiet --yes \
-    'conda-build' \
-    'ipywidgets=5.1*' \
-    'pandas=0.17*' \
-    'numexpr=2.5*' \
-    'matplotlib=1.5*' \
-    'scipy=0.17*' \
+    'nomkl' \
+    'ipywidgets=6.0*' \
+    'pandas=0.19*' \
+    'numexpr=2.6*' \
+    'matplotlib=2.0*' \
+    'scipy=0.19*' \
     'seaborn=0.7*' \
-    'scikit-learn=0.17*' \
-    'scikit-image=0.11*' \
+    'scikit-learn=0.18*' \
+    'scikit-image=0.12*' \
     'sympy=1.0*' \
-    'cython=0.23*' \
+    'cython=0.25*' \
     'patsy=0.4*' \
-    'statsmodels=0.6*' \
-    'cloudpickle=0.1*' \
+    'statsmodels=0.8*' \
+    'cloudpickle=0.2*' \
     'dill=0.2*' \
-    'numba=0.23*' \
-    'bokeh=0.11*' \
-    'h5py=2.5*' \
-    'mpld3=0.2*' \
+    'numba=0.31*' \
+    'bokeh=0.12*' \
+    'sqlalchemy=1.1*' \
+    'hdf5=1.8.17' \
+    'h5py=2.6*' \
+    'vincent=0.4.*' \
+    'beautifulsoup4=4.5.*' \
+    'xlrd' \
+    && conda remove --quiet --yes --force qt pyqt \
     && conda clean -tipsy
 # Activate ipywidgets extension in the environment that runs the notebook server
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
 
 # Install Python 2 packages
 RUN conda create --quiet --yes -p $CONDA_DIR/envs/python2 python=2.7 \
-    'ipython=4.*' \
-    'ipywidgets=5.1*' \
-    'pandas=0.17*' \
-    'numexpr=2.5*' \
-    'matplotlib=1.5*' \
-    'scipy=0.17*' \
+    'nomkl' \
+    'ipython=5.3*' \
+    'ipywidgets=6.0*' \
+    'pandas=0.19*' \
+    'numexpr=2.6*' \
+    'matplotlib=2.0*' \
+    'scipy=0.19*' \
     'seaborn=0.7*' \
-    'scikit-learn=0.17*' \
-    'scikit-image=0.11*' \
+    'scikit-learn=0.18*' \
+    'scikit-image=0.12*' \
     'sympy=1.0*' \
-    'cython=0.23*' \
+    'cython=0.25*' \
     'patsy=0.4*' \
-    'statsmodels=0.6*' \
-    'cloudpickle=0.1*' \
+    'statsmodels=0.8*' \
+    'cloudpickle=0.2*' \
     'dill=0.2*' \
-    'numba=0.23*' \
-    'bokeh=0.11*' \
-    'h5py=2.5*' \
+    'numba=0.31*' \
+    'bokeh=0.12*' \
+    'hdf5=1.8.17' \
+    'h5py=2.6*' \
+    'sqlalchemy=1.1*' \
     'pyzmq' \
-    'mpld3=0.2*' \
-    && conda clean -tipsy
+    'vincent=0.4.*' \
+    'beautifulsoup4=4.5.*' \
+    'xlrd' && \
+    conda remove -n python2 --quiet --yes --force qt pyqt && \
+    conda clean -tipsy
 
-# Add shortcuts to distinguish pip for python2. python3 is enabled
-# as default with pip already
+# Add shortcuts to distinguish pip for python2 and python3 envs
 RUN ln -s $CONDA_DIR/envs/python2/bin/pip $CONDA_DIR/bin/pip2
+# ln -s $CONDA_DIR/bin/pip $CONDA_DIR/bin/pip3
+
+# Import matplotlib the first time to build the font cache.
+ENV XDG_CACHE_HOME /root/.cache/
+RUN MPLBACKEND=Agg $CONDA_DIR/envs/python2/bin/python -c "import matplotlib.pyplot"
+
+# Configure ipython kernel to use matplotlib inline backend by default
+RUN mkdir -p /root/.ipython/profile_default/startup
+COPY mplimporthook.py /root/.ipython/profile_default/startup/
 
 # Install Python 2 kernel spec globally
-RUN $CONDA_DIR/envs/python2/bin/python -m ipykernel install
-
-ADD serve /
+RUN pip install kernda --no-cache && \
+    $CONDA_DIR/envs/python2/bin/python -m ipykernel install && \
+    kernda -o -y /usr/local/share/jupyter/kernels/python2/kernel.json && \
+    pip uninstall kernda -y

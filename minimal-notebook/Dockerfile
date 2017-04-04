@@ -23,17 +23,12 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     texlive-fonts-extra \
     texlive-fonts-recommended \
     texlive-generic-recommended \
+    texlive-xetex \
     libxrender1 \
+    inkscape \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip
 # https://github.com/ContinuumIO/anaconda-issues/issues/542
 RUN pip install -q --upgrade --ignore-installed pip wheel setuptools
-RUN pip install \
-    psycopg2 \
-    pymongo \
-    cassandra-driver \
-    mysqlclient
-
-ADD serve /

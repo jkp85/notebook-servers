@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM 3blades/core-server
 
 MAINTAINER 3Blades <contact@3blades.io>
 
