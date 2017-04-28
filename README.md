@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/3Blades/notebook-servers.svg?branch=master)](https://travis-ci.org/3Blades/notebook-servers)
-[![slack in](https://slackin-pypmyuhqds.now.sh/badge.svg)](https://slackin-pypmyuhqds.now.sh/)
+[![slack in](https://slack.3blades.io/badge.svg)](https://slack.3blades.io/)
 
 # Data Science Notebooks configured to work with 3Blades
 
@@ -12,6 +12,7 @@
 - [Data Science Notebook](https://github.com/3Blades/notebook-servers/tree/master/datascience-notebook)
 - [PySpark Notebook](https://github.com/3Blades/notebook-servers/tree/master/pyspark-notebook)
 - [All Spark](https://github.com/3Blades/notebook-servers/tree/master/all-spark-notebook)
+- [Tensorflow](https://github.com/3Blades/notebook-servers/tree/master/tensorflow)
 - [JupyterLab](https://github.com/3Blades/notebook-servers/tree/master/jupyterlabs)
 
 Based mostly on jupyter/docker-stacks images.
