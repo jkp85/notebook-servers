@@ -9,4 +9,4 @@ RUN conda install --quiet --yes 'tensorflow=1.0*'
 RUN conda install --quiet --yes -n python2 'tensorflow=1.0*'
 
 # Install Keras with conda-forge
-RUN conda install -c conda-forge keras=2.0.2
+RUN conda install -c conda-forge keras=2.0.4
