@@ -10,4 +10,5 @@ c.NotebookApp.port = 8888
 c.NotebookApp.open_browser = False
 c.NotebookApp.token = ''
 c.NotebookApp.password = ''
+c.NotebookApp.tornado_settings = { 'headers': { 'Content-Security-Policy': "child-src * " } }
 c.NotebookApp.default_url = '/lab'
