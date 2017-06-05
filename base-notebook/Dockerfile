@@ -50,4 +50,5 @@ CMD ["start-notebook.sh"]
 
 # Add local files as late as possible to avoid cache busting
 COPY start-notebook.sh /usr/local/bin/
+COPY jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 RUN chmod +x /usr/local/bin/start-notebook.sh
