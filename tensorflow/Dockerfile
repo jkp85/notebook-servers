@@ -1,4 +1,4 @@
-FROM 3blades/scipy-notebook
+FROM 3blades/jupyterlab:iframe
 
 MAINTAINER 3Blades <contact@3blades.io>
 
