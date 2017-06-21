@@ -6,7 +6,9 @@ USER root
 
 # libav-tools for matplotlib anim
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libav-tools && \
+    apt-get install -y --no-install-recommends \
+      libav-tools \
+      libgtk2.0-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -35,6 +37,7 @@ RUN conda install --quiet --yes \
     'vincent=0.4.*' \
     'beautifulsoup4=4.5.*' \
     'xlrd' \
+    'opencv' \
     && conda remove --quiet --yes --force qt pyqt \
     && conda clean -tipsy
 # Activate ipywidgets extension in the environment that runs the notebook server
@@ -66,7 +69,8 @@ RUN conda create --quiet --yes -p $CONDA_DIR/envs/python2 python=2.7 \
     'pyzmq' \
     'vincent=0.4.*' \
     'beautifulsoup4=4.5.*' \
-    'xlrd' && \
+    'xlrd' \
+    'opencv' && \
     conda remove -n python2 --quiet --yes --force qt pyqt && \
     conda clean -tipsy
 
