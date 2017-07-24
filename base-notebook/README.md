@@ -4,8 +4,8 @@ Small base image for defining your own stack
 
 ## What it Gives You
 
-* Minimally-functional Jupyter Notebook 4.2.x (e.g., no pandoc for document conversion)
-* Miniconda Python 3.x
+* Minimally-functional Jupyter Notebook 5.x (e.g., no pandoc for document conversion)
+* Miniconda Python 4.x
 * No preinstalled scientific computing packages
 * [tini](https://github.com/krallin/tini) as the container entrypoint and [start-notebook.sh](./start-notebook.sh) as the default command
 
@@ -14,7 +14,7 @@ Small base image for defining your own stack
 The following command starts a container with the Notebook server listening for HTTP connections on port 8888 without authentication configured.
 
 ```
-docker run -d -p 8888:8888 jupyter/base-notebook
+docker run -d -p 8888:8888 3blades/base-notebook
 ```
 
 ## Conda Environment

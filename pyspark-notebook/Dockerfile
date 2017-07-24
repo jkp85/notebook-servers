@@ -5,7 +5,7 @@ MAINTAINER 3Blades <contact@3blades.io>
 USER root
 
 # Spark dependencies
-ENV APACHE_SPARK_VERSION 2.1.0
+ENV APACHE_SPARK_VERSION 2.2.0
 ENV HADOOP_VERSION 2.7
 
 # Temporarily add jessie backports to get openjdk 8, but then remove that source

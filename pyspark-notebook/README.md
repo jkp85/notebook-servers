@@ -2,11 +2,11 @@
 
 ## What it Gives You
 
-* Jupyter Notebook 4.2.x
+* Jupyter Notebook 5.x
 * Conda Python 3.x and Python 2.7.x environments
 * pyspark, pandas, matplotlib, scipy, seaborn, scikit-learn pre-installed
-* Spark 1.6.0 for use in local mode or to connect to a cluster of Spark workers
-* Mesos client 0.22 binary that can communicate with a Mesos master
+* Spark 2.x with Hadoop 2.x for use in local mode or to connect to a cluster of Spark workers
+* Mesos client 1.x binary that can communicate with a Mesos master
 * [tini](https://github.com/krallin/tini) as the container entrypoint and [start-notebook.sh](../minimal-notebook/start-notebook.sh) as the default command
 
 ## Basic Use
@@ -14,7 +14,7 @@
 The following command starts a container with the Notebook server listening for HTTP connections on port 8888 without authentication configured.
 
 ```
-docker run -d -p 8888:8888 jupyter/pyspark-notebook
+docker run -d -p 8888:8888 3blades/pyspark-notebook
 ```
 
 ## Using Spark
@@ -67,7 +67,7 @@ conf = pyspark.SparkConf()
 conf.setMaster("mesos://10.10.10.10:5050")
 # point to spark binary package in HDFS or on local filesystem on all slave
 # nodes (e.g., file:///opt/spark/spark-1.6.0-bin-hadoop2.6.tgz)
-conf.set("spark.executor.uri", "hdfs://10.122.193.209/spark/spark-1.6.0-bin-hadoop2.6.tgz")
+conf.set("spark.executor.uri", "hdfs://10.122.193.209/spark/spark-2.2.0-bin-hadoop2.6.tgz")
 # set other options as desired
 conf.set("spark.executor.memory", "8g")
 conf.set("spark.core.connection.ack.wait.timeout", "1200")

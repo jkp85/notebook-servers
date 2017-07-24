@@ -2,7 +2,7 @@
 
 ## What it Gives You
 
-* Jupyter Notebook 4.1.x
+* Jupyter Notebook 5.x
 * Conda Python 3.x and Python 2.7.x environments
 * pandas, matplotlib, scipy, seaborn, scikit-learn, scikit-image, sympy, cython, patsy, statsmodel, cloudpickle, dill, numba, bokeh pre-installed
 * Conda R v3.2.x and channel
@@ -15,7 +15,7 @@
 The following command starts a container with the Notebook server listening for HTTP connections on port 8888 without authentication configured.
 
 ```
-docker run -d -p 8888:8888 jupyter/datascience-notebook
+docker run -d -p 8888:8888 3blades/datascience-notebook
 ```
 
 ## Conda Environments
