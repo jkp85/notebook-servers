@@ -27,8 +27,8 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 
 # Install Jupyter notebook
 RUN conda install --quiet --yes \
-    'notebook=4.4.*' \
-    'jupyterlab=0.17.*' \
+    'notebook=5.0.*' \
+    'jupyterlab=0.24.*' \
     && conda clean -tipsy
 
 # Add a notebook profile.
@@ -36,11 +36,6 @@ RUN mkdir -p -m 700 /root/.jupyter/ && \
     echo "c.NotebookApp.ip = '*'" >> /root/.jupyter/jupyter_notebook_config.py
 
 RUN pip3 install -q --upgrade pip wheel setuptools
-RUN pip3 install \
-    psycopg2 \
-    pymongo \
-    cassandra-driver \
-    mysqlclient
 
 # Configure container startup as root
 EXPOSE 8888
