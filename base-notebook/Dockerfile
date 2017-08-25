@@ -38,7 +38,7 @@ RUN mkdir -p -m 700 /root/.jupyter/ && \
 RUN pip3 install -q --upgrade pip wheel setuptools
 
 # Configure container startup as root
-EXPOSE 8888
+EXPOSE 8080
 WORKDIR /home/work
 ENTRYPOINT ["tini", "--"]
 CMD ["start-notebook.sh"]
