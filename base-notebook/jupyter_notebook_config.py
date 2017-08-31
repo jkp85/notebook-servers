@@ -5,6 +5,7 @@ import errno
 import stat
 
 c = get_config()
+c.NotebookApp.iopub_data_rate_limit=1.0e10
 c.NotebookApp.ip = '*'
 c.NotebookApp.port = 8888
 c.NotebookApp.open_browser = False
