@@ -54,3 +54,12 @@ RUN echo "push!(Libdl.DL_LOAD_PATH, \"$CONDA_DIR/lib\")" > /root/.juliarc.jl && 
 
 # Precompile Julia pakcages
 RUN julia -e 'using IJulia' && julia -e 'using Gadfly' && julia -e 'using RDatasets'&& julia -e 'using HDF5'
+
+# Install Python 3 Tensorflow
+RUN conda install --quiet --yes 'tensorflow=1.*'
+
+# Install Python 2 Tensorflow
+RUN conda install --quiet --yes -n python2 'tensorflow=1.*'
+
+# Install Keras with conda-forge
+RUN conda install -c conda-forge keras=2.0.*
