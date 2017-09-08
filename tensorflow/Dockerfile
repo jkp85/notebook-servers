@@ -1,5 +1,5 @@
 FROM 3blades/core-server AS core
-FROM 3blades/base-image AS base
+FROM 3blades/base-notebook AS base
 FROM tensorflow/tensorflow:latest-gpu
 
 MAINTAINER 3Blades <contact@3blades.io>
