@@ -13,21 +13,13 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Julia dependencies
-# install Julia packages in /opt/julia
-ENV JULIA_PKGDIR=/opt/julia
-
-RUN . /etc/os-release && \
-    echo "deb http://ppa.launchpad.net/staticfloat/juliareleases/ubuntu $VERSION_CODENAME main" > /etc/apt/sources.list.d/julia.list && \
+RUN echo "deb http://ppa.launchpad.net/staticfloat/juliareleases/ubuntu trusty main" > /etc/apt/sources.list.d/julia.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3D3D3ACC && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-    julia && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    # Show Julia where conda libraries are \
-    echo "push!(Libdl.DL_LOAD_PATH, \"$CONDA_DIR/lib\")" >> /usr/etc/julia/juliarc.jl && \
-    # Create JULIA_PKGDIR \
-    mkdir $JULIA_PKGDIR
+    julia \
+    libnettle6 && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # R packages including IRKernel which gets installed globally.
 RUN conda config --add channels r && \
@@ -47,22 +39,27 @@ RUN conda config --add channels r && \
     'r-caret=6.0*' \
     'r-rcurl=1.95*' \
     'r-crayon=1.3*' \
-    'r-randomforest=4.6*' && \
-    conda clean -tipsy
+    'r-randomforest=4.6*' && conda clean -tipsy
 
 # Install IJulia packages.
-RUN julia -e 'Pkg.init()' && \
-    julia -e 'Pkg.update()' && \
-    julia -e 'Pkg.add("HDF5")' && \
-    julia -e 'Pkg.add("Gadfly")' && \
-    julia -e 'Pkg.add("RDatasets")' && \
-    julia -e 'Pkg.add("IJulia")' && \
-    # Precompile Julia packages \
-    julia -e 'using HDF5' && \
-    julia -e 'using Gadfly' && \
-    julia -e 'using RDatasets' && \
-    julia -e 'using IJulia' && \
-    # move kernelspec out of home \
+RUN julia -e 'Pkg.add("IJulia")' && \
     mv /root/.local/share/jupyter/kernels/julia* $CONDA_DIR/share/jupyter/kernels/ && \
     chmod -R go+rx $CONDA_DIR/share/jupyter && \
-    rm -rf /root/.local
+    rm -rf $HOME/.local
+
+# Show Julia where conda libraries are
+# Add essential packages
+RUN echo "push!(Libdl.DL_LOAD_PATH, \"$CONDA_DIR/lib\")" > /root/.juliarc.jl && \
+    julia -e 'Pkg.add("Gadfly")' && julia -e 'Pkg.add("RDatasets")' && julia -F -e 'Pkg.add("HDF5")'
+
+# Precompile Julia pakcages
+RUN julia -e 'using IJulia' && julia -e 'using Gadfly' && julia -e 'using RDatasets'&& julia -e 'using HDF5'
+
+# Install Python 3 Tensorflow
+RUN conda install --quiet --yes 'tensorflow=1.*'
+
+# Install Python 2 Tensorflow
+RUN conda install --quiet --yes -n python2 'tensorflow=1.*'
+
+# Install Keras with conda-forge
+RUN conda install -c conda-forge keras=2.0.*
