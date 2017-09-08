@@ -1,15 +1,12 @@
-FROM 3blades/core-server AS core
-FROM 3blades/base-notebook AS base
-FROM tensorflow/tensorflow:latest-gpu
+FROM 3blades/jupyterlab:iframe
 
 MAINTAINER 3Blades <contact@3blades.io>
 
-# Copy runner from core-server
-COPY --from=core runner /runner
+# Install Python 3 Tensorflow
+RUN conda install --quiet --yes 'tensorflow=1.*'
 
-# Copy jupyter config and startup script from base-server
-COPY --from=base /usr/local/bin/start-notebook.sh /usr/local/bin/start-notebook.sh
-COPY --from=base /root/.jupyter/jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
+# Install Python 2 Tensorflow
+RUN conda install --quiet --yes -n python2 'tensorflow=1.*'
 
-# Install Keras
-RUN pip install keras
+# Install Keras with conda-forge
+RUN conda install -c conda-forge keras=2.0.*
