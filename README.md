@@ -14,4 +14,6 @@
 - [Tensorflow](https://github.com/3Blades/notebook-servers/tree/master/tensorflow)
 - [JupyterLab](https://github.com/3Blades/notebook-servers/tree/master/jupyterlabs)
 
+## Attributions
+
 Based mostly on jupyter/docker-stacks images.
