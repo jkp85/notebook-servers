@@ -12,4 +12,4 @@ COPY --from=base /usr/local/bin/start-notebook.sh /usr/local/bin/start-notebook.
 COPY --from=base /root/.jupyter/jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 
 # Install Keras
-RUN pip install -y keras
+RUN pip install keras
