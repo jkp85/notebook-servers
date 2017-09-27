@@ -11,3 +11,5 @@ c.NotebookApp.port = 8888
 c.NotebookApp.open_browser = False
 c.NotebookApp.tornado_settings = { 'headers': { 'Content-Security-Policy': "child-src * " } }
 c.NotebookApp.iopub_data_rate_limit=1.0e10
+c.NotebookApp.token=''
+c.NotebookApp.allow_root = True

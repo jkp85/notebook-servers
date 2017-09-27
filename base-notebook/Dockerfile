@@ -27,13 +27,9 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 
 # Install Jupyter notebook
 RUN conda install --quiet --yes \
-    'notebook=5.0.*' \
-    'jupyterlab=0.24.*' \
+    'notebook=5.1.*' \
+    'jupyterlab=0.27.*' \
     && conda clean -tipsy
-
-# Add a notebook profile.
-RUN mkdir -p -m 700 /root/.jupyter/ && \
-    echo "c.NotebookApp.ip = '*'" >> /root/.jupyter/jupyter_notebook_config.py
 
 RUN pip3 install -q --upgrade pip wheel setuptools
 
