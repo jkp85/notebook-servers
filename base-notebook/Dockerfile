@@ -1,6 +1,6 @@
 # Based on Nvidia's Ubuntu Xenial (16.04) for GPU support
 # when applicable.
-FROM 3blades/core-server AS core
+FROM 3blades/core-server:build-109 AS core
 FROM ubuntu:16.04
 
 MAINTAINER 3Blades <contact@3blades.io>
