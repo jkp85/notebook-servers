@@ -1,4 +1,4 @@
-FROM 3blades/core-server:build-109 AS core
+FROM 3blades/core-server:build-112 AS core
 FROM rocker/rstudio:3.4.1
 
 EXPOSE 8080
