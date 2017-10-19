@@ -1,65 +1,182 @@
-FROM 3blades/scipy-notebook:latest
+FROM 3blades/core-server:build-112 AS core
+FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 
 MAINTAINER 3Blades <contact@3blades.io>
 
-USER root
+# Set environment veriables
+ENV JULIA_VERSION=0.6.0
 
-# R pre-requisites
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    fonts-dejavu \
+# Install Python3.6, link python3 to 3.6
+RUN apt-get update \
+ && apt-get upgrade -y \
+ && apt-get install -y \
+    software-properties-common \
+ && add-apt-repository -y ppa:jonathonf/python-3.6 \
+ && apt update -y \
+ && apt --assume-yes install -y \
+    python3.6 \
+ && unlink /usr/bin/python3 \
+ && ln -s /usr/bin/python3.6 /usr/bin/python3
+
+# Install all OS dependencies for notebook server that starts but lacks all
+# features (e.g., download as all possible file formats)
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && apt-get -yq dist-upgrade \
+ && apt-get install -yq --no-install-recommends \
+    apt-transport-https \
+    build-essential \
+    bzip2 \
+    ca-certificates \
+    cmake \
+    emacs \
+    fonts-liberation \
+    gcc \
     gfortran \
-    gcc && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    git \
+    graphviz \
+    fonts-dejavu \
+    inkscape \
+    jed \
+    libav-tools \
+    libavcodec-dev \
+    libavformat-dev \
+    libblas-dev \
+    libdc1394-22-dev \
+    libffi-dev \
+    libgtk2.0-dev \
+    libjpeg-dev \
+    liblapack-dev \
+    libgtk2.0-dev \
+    libjasper-dev \
+    libpng-dev \
+    libpq-dev \
+    libmysqlclient-dev \
+    libopencv-dev \
+    libpython3.6-dev \
+    libssl-dev \
+    libtiff-dev \
+    libsm6 \
+    libswscale-dev \
+    libtbb2 \
+    libxft-dev \
+    libxrender1 \
+    locales \
+    openmpi-bin \
+    pandoc \
+    pkg-config \
+    python-dev \
+    python-pip \
+    python-setuptools \
+    python3-pip \
+    python3-setuptools \
+    sudo \
+    texlive-latex-base \
+    texlive-latex-extra \
+    texlive-fonts-extra \
+    texlive-fonts-recommended \
+    texlive-generic-recommended \
+    texlive-xetex \
+    unzip \
+    vim \
+    wget \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
-# Julia dependencies
-RUN echo "deb http://ppa.launchpad.net/staticfloat/juliareleases/ubuntu trusty main" > /etc/apt/sources.list.d/julia.list && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3D3D3ACC && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-    julia \
-    libnettle6 && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN echo 'en_US.UTF-8' > /etc/locale.gen && \
+    locale-gen
 
-# R packages including IRKernel which gets installed globally.
-RUN conda config --add channels r && \
-    conda install --quiet --yes \
-    'rpy2=2.8*' \
-    'r-base=3.3.2' \
-    'r-irkernel=0.7*' \
-    'r-plyr=1.8*' \
-    'r-devtools=1.12*' \
-    'r-tidyverse=1.0*' \
-    'r-shiny=0.14*' \
-    'r-rmarkdown=1.2*' \
-    'r-forecast=7.3*' \
-    'r-rsqlite=1.1*' \
-    'r-reshape2=1.4*' \
-    'r-nycflights13=0.2*' \
-    'r-caret=6.0*' \
-    'r-rcurl=1.95*' \
-    'r-crayon=1.3*' \
-    'r-randomforest=4.6*' && conda clean -tipsy
+# Install Tini
+RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini \
+ && echo "1361527f39190a7338a0b434bd8c88ff7233ce7b9a4876f3315c22fce7eca1b0 *tini" | sha256sum -c - \
+ && mv tini /usr/local/bin/tini \
+ && chmod +x /usr/local/bin/tini
+
+# Install virtualenv
+RUN pip install virtualenv \
+ && pip3 install virtualenv
+
+# Upgrade pip and pip3
+RUN pip install --upgrade pip
+RUN pip3 install --upgrade pip
+
+# Install setuptools
+RUN pip install --upgrade pip setuptools
+
+# Install Jupyter Notebook
+RUN pip install --no-cache-dir \
+    jupyter \
+    jupyterlab
+
+# Set up kernel for Python2
+RUN python2 -m pip install ipykernel
+RUN python2 -m ipykernel install --user
+
+# Install Python2 packages
+RUN pip2 install --user \
+      graphviz \
+      h5py \
+      matplotlib \
+      nose \
+      numpy \
+      pandas \
+      Pillow \
+      pyyaml \
+      scipy \
+      scikit-learn \
+      sympy
+
+# Install Python3 packages
+RUN pip3 install --user \
+      graphviz \
+      h5py \
+      matplotlib \
+      nose \
+      numpy \
+      pandas \
+      Pillow \
+      pyyaml \
+      scipy \
+      scikit-learn \
+      sympy
+
+# Install Julia
+RUN cd /tmp \
+ && mkdir /opt/julia-$JULIA_VERSION \
+ && wget https://julialang-s3.julialang.org/bin/linux/x64/0.6/julia-0.6.0-linux-x86_64.tar.gz \
+ && tar -xvf julia-$JULIA_VERSION-linux-x86_64.tar.gz --strip-components 1 -C /opt/julia-$JULIA_VERSION \
+ && ln -s /opt/julia-$JULIA_VERSION/bin/julia /usr/local/bin/julia \
+ && rm julia-$JULIA_VERSION-linux-x86_64.tar.gz
 
 # Install IJulia packages.
-RUN julia -e 'Pkg.add("IJulia")' && \
-    mv /root/.local/share/jupyter/kernels/julia* $CONDA_DIR/share/jupyter/kernels/ && \
-    chmod -R go+rx $CONDA_DIR/share/jupyter && \
-    rm -rf $HOME/.local
+RUN julia -e 'Pkg.add("IJulia")'
 
-# Show Julia where conda libraries are
 # Add essential packages
-RUN echo "push!(Libdl.DL_LOAD_PATH, \"$CONDA_DIR/lib\")" > /root/.juliarc.jl && \
-    julia -e 'Pkg.add("Gadfly")' && julia -e 'Pkg.add("RDatasets")' && julia -F -e 'Pkg.add("HDF5")'
+RUN julia -e 'Pkg.init()' \
+ && julia -e 'Pkg.update()' \
+ && julia -e 'Pkg.add("DataFrames")' \
+ && julia -e 'Pkg.add("Gadfly")' \
+ && julia -e 'Pkg.add("HDF5")' \
+ && julia -e 'Pkg.add("IJulia")' \
+ && julia -e 'Pkg.add("RDatasets")' \
+# Precompile Julia packages \
+ && julia -e 'using DataFrames' \
+ && julia -e 'using Gadfly' \
+ && julia -e 'using HDF5' \
+ && julia -e 'using IJulia' \
+ && julia -e 'using RDatasets'
 
-# Precompile Julia pakcages
-RUN julia -e 'using IJulia' && julia -e 'using Gadfly' && julia -e 'using RDatasets'&& julia -e 'using HDF5'
+# Configure container startup as root
+EXPOSE 8080
+WORKDIR /home/work
+ENTRYPOINT ["tini", "--"]
+CMD ["start-notebook.sh"]
 
-# Install Python 3 Tensorflow
-RUN conda install --quiet --yes 'tensorflow=1.*'
+# Configure ipython kernel to use matplotlib inline backend by default
+RUN mkdir -p /root/.ipython/profile_default/startup
 
-# Install Python 2 Tensorflow
-RUN conda install --quiet --yes -n python2 'tensorflow=1.*'
-
-# Install Keras with conda-forge
-RUN conda install -c conda-forge keras=2.0.*
+# Add local files as late as possible to avoid cache busting
+COPY mplimporthook.py /root/.ipython/profile_default/startup/
+COPY jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
+COPY --from=core runner /runner
+COPY start-notebook.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/start-notebook.sh
