@@ -1,14 +1,18 @@
-# Jupyter Notebook Data Science Stack
+# Data Science Jupyter Notebook
+
+Jupyter Notebook Data Science Image
+
+**Try online for free at [3blades.io](https://3blades.io/)!**
 
 ## What it Gives You
 
-* Jupyter Notebook 5.x
-* Conda Python 3.x and Python 2.7.x environments
-* pandas, matplotlib, scipy, seaborn, scikit-learn, scikit-image, sympy, cython, patsy, statsmodel, cloudpickle, dill, numba, bokeh pre-installed
-* Conda R v3.2.x and channel
-* plyr, devtools, dplyr, ggplot2, tidyr, shiny, rmarkdown, forecast, stringr, rsqlite, reshape2, nycflights13, caret, rcurl, and randomforest pre-installed
-* Julia v0.3.x with Gadfly and RDatasets pre-installed
-* Options for HTTPS, password auth, and passwordless `sudo`
+* Latest version of [Jupyter Notebook](http://jupyter.org/)
+* Latest version of [JupyterLab](https://github.com/jupyterlab/jupyterlab)
+* Python2.7 and Python3.6 Kernels
+* [Scipy](https://www.scipy.org/index.html) Packages
+* [Scikit-learn](http://scikit-learn.org/stable/)
+* [Julia](https://julialang.org/) version `0.6.0`
+* [tini](https://github.com/krallin/tini) as the container entrypoint and [start-notebook.sh](./start-notebook.sh) as the default command
 
 ## Basic Use
 
@@ -17,19 +21,3 @@ The following command starts a container with the Notebook server listening for 
 ```
 docker run -d -p 8888:8888 3blades/datascience-notebook
 ```
-
-## Conda Environments
-
-The default Python 3.x [Conda environment](http://conda.pydata.org/docs/using/envs.html) resides in `/opt/conda`. A second Python 2.x Conda environment exists in `/opt/conda/envs/python2`. You can [switch to the python2 environment](http://conda.pydata.org/docs/using/envs.html#change-environments-activate-deactivate) in a shell by entering the following:
-
-```
-source activate python2
-```
-
-You can return to the default environment with this command:
-
-```
-source deactivate
-```
-
-The commands `ipython`, `python`, `pip`, `easy_install`, and `conda` (among others) are available in both environments.

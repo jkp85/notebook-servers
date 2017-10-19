@@ -1,0 +1,25 @@
+FROM 3blades/datascience-notebook:latest
+
+MAINTAINER 3Blades <contact@3blades.io>
+
+# Configure environment
+ENV MXNET_VERSION=0.11.0
+
+# Install Python 2 CNTK
+RUN pip2 install https://cntk.ai/PythonWheel/GPU/cntk-2.2-cp27-cp27mu-linux_x86_64.whl
+
+# Install Python 3 CNTK
+RUN pip3 install https://cntk.ai/PythonWheel/GPU/cntk-2.2-cp36-cp36m-linux_x86_64.whl
+
+# Install MXNet
+RUN pip2 install mxnet-cu80==$MXNET_VERSION
+
+# Install Python 2 Tensorflow
+RUN pip2 install tensorflow-gpu
+
+# Install Python 3 Tensorflow
+RUN pip3 install tensorflow-gpu
+
+# Install Keras
+RUN pip2 install keras
+RUN pip3 install keras

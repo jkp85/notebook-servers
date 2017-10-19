@@ -2,16 +2,10 @@
 
 # Data Science Notebooks configured to work with 3Blades
 
-## Jupyter Notebooks
+**Try online for free at [3blades.io](https://3blades.io/)!**
 
-- [Base Notebook](https://github.com/3Blades/notebook-servers/tree/master/base-notebook)
-- [Minimal Notebook](https://github.com/3Blades/notebook-servers/tree/master/minimal-notebook)
-- [Scipy Notebook](https://github.com/3Blades/notebook-servers/tree/master/scipy-notebook)
-- [R Notebook](https://github.com/3Blades/notebook-servers/tree/master/r-notebook)
-- [Data Science Notebook](https://github.com/3Blades/notebook-servers/tree/master/datascience-notebook)
-- [PySpark Notebook](https://github.com/3Blades/notebook-servers/tree/master/pyspark-notebook)
-- [All Spark](https://github.com/3Blades/notebook-servers/tree/master/all-spark-notebook)
-- [Tensorflow](https://github.com/3Blades/notebook-servers/tree/master/tensorflow)
-- [JupyterLab](https://github.com/3Blades/notebook-servers/tree/master/jupyterlabs)
+## Jupyter Notebooks (CPU/GPU) and R IDE (CPU)
 
-Based mostly on jupyter/docker-stacks images.
+- [Data Science Jupyter Notebook Image](https://github.com/3Blades/notebook-servers/tree/master/datascience-notebook)
+- [Deep Learning Jupyter Notebook Images](https://github.com/3Blades/notebook-servers/tree/master/deeplearning-notebook)
+- [Deep Learning R IDE Images](https://github.com/3Blades/notebook-servers/tree/master/rstudio)
