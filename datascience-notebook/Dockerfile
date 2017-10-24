@@ -1,4 +1,4 @@
-FROM 3blades/core-server:build-112 AS core
+FROM 3blades/core-server:build-115 AS core
 FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 
 MAINTAINER 3Blades <contact@3blades.io>
