@@ -1,4 +1,4 @@
-FROM 3blades/core-server:build-112 AS core
+FROM 3blades/core-server:build-115 AS core
 FROM rocker/rstudio:3.4.1
 
 # Install dependencies
