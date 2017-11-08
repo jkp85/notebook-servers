@@ -165,6 +165,10 @@ RUN julia -e 'Pkg.init()' \
  && julia -e 'using IJulia' \
  && julia -e 'using RDatasets'
 
+# Install Keras and TensorFlow w/ Python2
+RUN pip2 install tensorflow-gpu
+RUN pip2 install keras
+
 # Configure container startup as root
 EXPOSE 8080
 WORKDIR /home/work
