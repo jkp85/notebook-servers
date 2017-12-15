@@ -2,14 +2,13 @@
 # module list
 # ------------------------------------------------------------------
 # python        2.7    (apt)
-# chainer       latest (pip)
-# cntk          2.3    (pip)
+# python        3.6    (apt)
 # mxnet         latest (pip)
-# pytorch       0.3.0  (pip)
 # tensorflow    latest (pip)
+# opencv        latest (git)
 # keras         latest (pip)
-# sonnet        latest (pip)
 # ==================================================================
+
 
 FROM 3blades/core-server:build-119 AS core
 FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
@@ -22,24 +21,44 @@ RUN rm -rf /var/lib/apt/lists/* \
     /etc/apt/sources.list.d/nvidia-ml.list && \
     apt-get update
 
+ENV DEBIAN_FRONTEND noninteractive
+
 # ==================================================================
 # tools
 # ------------------------------------------------------------------
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
+        apt-transport-https \
         build-essential \
+        bzip2 \
         ca-certificates \
         cmake \
-        wget \
+        emacs \
+        fonts-dejavu \    
+        fonts-liberation \
+        inkscape \
+        jed \
+        gcc \
+        gfortran \
         git \
         vim \        
-        locales
+        locales \        
+        openmpi-bin \
+        pandoc \
+        texlive-latex-base \
+        texlive-latex-extra \
+        texlive-fonts-extra \
+        texlive-fonts-recommended \
+        texlive-generic-recommended \
+        texlive-xetex \
+        unzip \        
+        wget
 
 # ==================================================================
-# python
+# python 2.7
 # ------------------------------------------------------------------
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
         python-pip \
         python-dev \
         && \
@@ -47,17 +66,52 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         setuptools \
         pip \
         && \
-    pip --no-cache-dir install --upgrade \
+    pip2 --no-cache-dir install --upgrade \
+        numpy \
+        scipy \
+        pandas \
+        scikit-learn \
+        matplotlib \
+        Cython \
         graphviz \
         h5py \
-        matplotlib \
         nose \
-        numpy \
-        pandas \
         Pillow \
         pyyaml \
+        sympy
+
+# ==================================================================
+# python 3.6
+# ------------------------------------------------------------------
+
+RUN apt-get install -y --no-install-recommends \
+        software-properties-common \
+        && \
+    add-apt-repository ppa:jonathonf/python-3.6 && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        python3.6 \
+        python3.6-dev \
+        && \
+    wget -O ~/get-pip.py \
+        https://bootstrap.pypa.io/get-pip.py && \
+    python3.6 ~/get-pip.py && \
+    ln -s /usr/bin/python3.6 /usr/local/bin/python3 && \
+    pip3 --no-cache-dir install --upgrade \
+        setuptools \
+        && \
+    pip3 --no-cache-dir install --upgrade \
+        numpy \
         scipy \
+        pandas \
         scikit-learn \
+        matplotlib \
+        Cython \
+        graphviz \
+        h5py \
+        nose \
+        Pillow \
+        pyyaml \
         sympy
 
 # ==================================================================
@@ -71,7 +125,7 @@ RUN pip --no-cache-dir install --upgrade \
 # mxnet
 # ------------------------------------------------------------------
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
         libatlas-base-dev \
         graphviz \
         && \
@@ -87,7 +141,34 @@ RUN pip --no-cache-dir install --upgrade \
         h5py \
         keras
 
-# Oringinal stuff
+# ==================================================================
+# opencv
+# ------------------------------------------------------------------
+
+RUN apt-get install -y --no-install-recommends \
+        libatlas-base-dev \
+        libgflags-dev \
+        libgoogle-glog-dev \
+        libhdf5-serial-dev \
+        libleveldb-dev \
+        liblmdb-dev \
+        libprotobuf-dev \
+        libsnappy-dev \
+        protobuf-compiler \
+        && \        
+    git clone --depth 10 https://github.com/opencv/opencv ~/opencv && \
+    mkdir -p ~/opencv/build && cd ~/opencv/build && \
+    cmake -D CMAKE_BUILD_TYPE=RELEASE \
+          -D CMAKE_INSTALL_PREFIX=/usr/local \
+          -D WITH_IPP=OFF \
+          -D WITH_CUDA=OFF \
+          -D WITH_OPENCL=OFF \
+          -D BUILD_TESTS=OFF \
+          -D BUILD_PERF_TESTS=OFF \
+          .. && \
+    make -j"$(nproc)" install
+
+# Original stuff
 RUN echo 'en_US.UTF-8' > /etc/locale.gen && \
         locale-gen 
 
@@ -102,19 +183,14 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 # ==================================================================
 # virtualenv
 # ------------------------------------------------------------------
-RUN pip --no-cache-dir install --upgrade \
-        virtualenv
+RUN pip --no-cache-dir install --upgrade virtualenv && \
+    pip3 --no-cache-dir install --upgrade virtualenv
 
 # ==================================================================
 # Upgrade pip
 # ------------------------------------------------------------------
-RUN pip install --upgrade pip
-
-# ==================================================================
-# Setup tools
-# ------------------------------------------------------------------
-RUN pip --no-cache-dir install --upgrade \
-        setuptools
+RUN pip install --upgrade pip && \
+    pip3 install --upgrade pip
 
 # ==================================================================
 # Jupyter Notebook
@@ -129,11 +205,20 @@ RUN pip --no-cache-dir install --upgrade \
 RUN python2 -m pip install ipykernel && \
     python2 -m ipykernel install --user
 
+# ==================================================================
+# config & cleanup
+# ------------------------------------------------------------------
+
+RUN ldconfig && \
+    apt-get clean && \
+    apt-get autoremove && \
+    rm -rf /var/lib/apt/lists/* /tmp/* ~/*
+
 # Configure container startup as root
 EXPOSE 8080
 WORKDIR /home/work
 ENTRYPOINT ["tini", "--"]
-CMD ["bash start-notebook.sh"]
+CMD ["start-notebook.sh"]
 
 # Configure ipython kernel to use matplotlib inline backend by default
 RUN mkdir -p /root/.ipython/profile_default/startup
