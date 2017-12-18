@@ -119,10 +119,10 @@ RUN apt-get install -y --no-install-recommends \
 # ------------------------------------------------------------------
 
 RUN pip --no-cache-dir install --upgrade \
-        tensorflow \
+        tensorflow_gpu \
         && \
     pip2 --no-cache-dir install --upgrade \
-        tensorflow
+        tensorflow_gpu
 
 # ==================================================================
 # mxnet
@@ -133,11 +133,11 @@ RUN apt-get install -y --no-install-recommends \
         graphviz \
         && \
     pip --no-cache-dir install --upgrade \
-        mxnet \
+        mxnet-cu80 \
         graphviz \
         && \
     pip2 --no-cache-dir install --upgrade \
-        mxnet \
+        mxnet-cu80 \
         graphviz
 
 # ==================================================================
