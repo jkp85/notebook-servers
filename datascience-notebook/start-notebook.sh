@@ -1,2 +1,2 @@
 #!/bin/bash
-exec jupyter notebook $*
+exec jupyter lab $*
