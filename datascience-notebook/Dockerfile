@@ -5,21 +5,21 @@ MAINTAINER 3Blades <contact@3blades.io>
 
 # Install Python3.6, link python3 to 3.6
 RUN apt-get update \
- && apt-get upgrade -y \
- && apt-get install -y \
+    && apt-get upgrade -y \
+    && apt-get install -y \
     software-properties-common \
- && add-apt-repository -y ppa:jonathonf/python-3.6 \
- && apt update -y \
- && apt --assume-yes install -y \
+    && add-apt-repository -y ppa:jonathonf/python-3.6 \
+    && apt update -y \
+    && apt --assume-yes install -y \
     python3.6 \
- && unlink /usr/bin/python3 \
- && ln -s /usr/bin/python3.6 /usr/bin/python3
+    && unlink /usr/bin/python3 \
+    && ln -s /usr/bin/python3.6 /usr/bin/python3
 
 # Install all OS dependencies for notebook server that starts but lacks all
 # features (e.g., download as all possible file formats)
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get -yq dist-upgrade \
- && apt-get install -yq --no-install-recommends \
+    && apt-get install -yq --no-install-recommends \
     apt-transport-https \
     build-essential \
     bzip2 \
@@ -76,21 +76,21 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     unzip \
     vim \
     wget \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN echo 'en_US.UTF-8' > /etc/locale.gen && \
     locale-gen
 
 # Install Tini
 RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini \
- && echo "1361527f39190a7338a0b434bd8c88ff7233ce7b9a4876f3315c22fce7eca1b0 *tini" | sha256sum -c - \
- && mv tini /usr/local/bin/tini \
- && chmod +x /usr/local/bin/tini
+    && echo "1361527f39190a7338a0b434bd8c88ff7233ce7b9a4876f3315c22fce7eca1b0 *tini" | sha256sum -c - \
+    && mv tini /usr/local/bin/tini \
+    && chmod +x /usr/local/bin/tini
 
 # Install virtualenv
 RUN pip install virtualenv \
- && pip3 install virtualenv
+    && pip3 install virtualenv
 
 # Upgrade pip and pip3
 RUN pip install --upgrade pip
@@ -110,35 +110,40 @@ RUN python2 -m ipykernel install --user
 
 # Install Python2 packages
 RUN pip2 install --user \
-      graphviz \
-      h5py \
-      matplotlib \
-      nose \
-      numpy \
-      pandas \
-      Pillow \
-      pyyaml \
-      scipy \
-      scikit-learn \
-      sympy
+    graphviz \
+    h5py \
+    matplotlib \
+    nose \
+    numpy \
+    pandas \
+    Pillow \
+    pyyaml \
+    scipy \
+    scikit-learn \
+    sympy
 
 # Install Python3 packages
 RUN pip3 install --user \
-      graphviz \
-      h5py \
-      matplotlib \
-      nose \
-      numpy \
-      pandas \
-      Pillow \
-      pyyaml \
-      scipy \
-      scikit-learn \
-      sympy
+    graphviz \
+    h5py \
+    matplotlib \
+    nose \
+    numpy \
+    pandas \
+    Pillow \
+    pyyaml \
+    scipy \
+    scikit-learn \
+    sympy
+
 
 # Install Keras and TensorFlow w/ Python2
 RUN pip2 install tensorflow-gpu
 RUN pip2 install keras
+
+# Install Keras and TensorFlow w/ Python3
+RUN pip3 install tensorflow-gpu
+RUN pip3 install keras
 
 # Configure container startup as root
 EXPOSE 8080
