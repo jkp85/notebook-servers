@@ -3,9 +3,6 @@ FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 
 MAINTAINER 3Blades <contact@3blades.io>
 
-# Set environment veriables
-ENV JULIA_VERSION=0.6.0
-
 # Install Python3.6, link python3 to 3.6
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -139,31 +136,6 @@ RUN pip3 install --user \
     scikit-learn \
     sympy
 
-# Install Julia
-RUN cd /tmp \
-    && mkdir /opt/julia-$JULIA_VERSION \
-    && wget https://julialang-s3.julialang.org/bin/linux/x64/0.6/julia-0.6.0-linux-x86_64.tar.gz \
-    && tar -xvf julia-$JULIA_VERSION-linux-x86_64.tar.gz --strip-components 1 -C /opt/julia-$JULIA_VERSION \
-    && ln -s /opt/julia-$JULIA_VERSION/bin/julia /usr/local/bin/julia \
-    && rm julia-$JULIA_VERSION-linux-x86_64.tar.gz
-
-# Install IJulia packages.
-RUN julia -e 'Pkg.add("IJulia")'
-
-# Add essential packages
-RUN julia -e 'Pkg.init()' \
-    && julia -e 'Pkg.update()' \
-    && julia -e 'Pkg.add("DataFrames")' \
-    && julia -e 'Pkg.add("Gadfly")' \
-    && julia -e 'Pkg.add("HDF5")' \
-    && julia -e 'Pkg.add("IJulia")' \
-    && julia -e 'Pkg.add("RDatasets")' \
-    # Precompile Julia packages \
-    && julia -e 'using DataFrames' \
-    && julia -e 'using Gadfly' \
-    && julia -e 'using HDF5' \
-    && julia -e 'using IJulia' \
-    && julia -e 'using RDatasets'
 
 # Install Keras and TensorFlow w/ Python2
 RUN pip2 install tensorflow-gpu
