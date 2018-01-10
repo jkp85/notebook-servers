@@ -99,6 +99,9 @@ RUN pip3 install --upgrade pip
 # Install setuptools
 RUN pip install --upgrade pip setuptools
 
+# Install pytests for notebook tests
+RUN pip install pytest
+
 # Install Jupyter Notebook
 RUN pip install --no-cache-dir \
     jupyter \
@@ -159,4 +162,10 @@ COPY mplimporthook.py /root/.ipython/profile_default/startup/
 COPY jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 COPY --from=core runner /runner
 COPY start-notebook.sh /usr/local/bin/
+
+# Add some notebook tests, tests can be run with the command:
+# docker run datascience-notebook pytest /home/tests/jupyter_tests.py
+ENV TEST_DIR /home/tests/
+COPY tests/ /home/tests/
+
 RUN chmod +x /usr/local/bin/start-notebook.sh
