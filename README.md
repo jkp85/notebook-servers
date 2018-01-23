@@ -2,10 +2,10 @@
 
 # Data Science Notebooks configured to work with 3Blades
 
-**Try online for free at [3blades.io](https://3blades.io/)!**
+**Try online for free at [illumidesk.com](https://illumidesk.com/)!**
 
 ## Jupyter Notebooks (CPU/GPU) and R IDE (CPU)
 
-- [Data Science Jupyter Notebook Image](https://github.com/3Blades/notebook-servers/tree/master/datascience-notebook)
-- [Deep Learning Jupyter Notebook Images](https://github.com/3Blades/notebook-servers/tree/master/deeplearning-notebook)
-- [Deep Learning R IDE Images](https://github.com/3Blades/notebook-servers/tree/master/rstudio)
+- [Data Science Jupyter Notebook Image](https://github.com/illumidesk/notebook-servers/tree/master/datascience-notebook)
+- [Deep Learning Jupyter Notebook Images](https://github.com/illumidesk/notebook-servers/tree/master/deeplearning-notebook)
+- [Deep Learning R IDE Images](https://github.com/illumidesk/notebook-servers/tree/master/rstudio)
