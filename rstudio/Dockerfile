@@ -26,6 +26,8 @@ RUN su - -c "R -e \"install.packages('devtools')\""
 # Install h20
 RUN su - -c "R -e \"install.packages('h2o')\""
 
+ENV ROOT TRUE
+
 EXPOSE 8080
 
 RUN echo "www-port=8888" > /etc/rstudio/rserver.conf
