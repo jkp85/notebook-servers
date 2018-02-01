@@ -138,11 +138,11 @@ RUN pip3 install --user \
 
 
 # Install Keras and TensorFlow w/ Python2
-RUN pip2 install tensorflow-gpu
+RUN pip2 install tensorflow
 RUN pip2 install keras
 
 # Install Keras and TensorFlow w/ Python3
-RUN pip3 install tensorflow-gpu
+RUN pip3 install tensorflow
 RUN pip3 install keras
 
 # Configure container startup as root
