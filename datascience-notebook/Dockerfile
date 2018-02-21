@@ -1,5 +1,5 @@
 # FROM 3blades/core-server:build-119 AS core
-FROM illumidesk/core-server:build-2 AS core
+FROM illumidesk/core-server:build-5 AS core
 FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 
 MAINTAINER 3Blades <contact@3blades.io>
