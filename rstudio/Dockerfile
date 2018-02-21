@@ -1,5 +1,5 @@
 # FROM 3blades/core-server:build-119 AS core
-FROM illumidesk/core-server:build-2 AS core
+FROM illumidesk/core-server:build-5 AS core
 FROM rocker/rstudio:3.4.1
 
 # Install dependencies
