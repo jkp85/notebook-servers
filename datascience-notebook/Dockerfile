@@ -1,5 +1,21 @@
 # FROM 3blades/core-server:build-119 AS core
 FROM illumidesk/core-server:build-2 AS core
+# build canvas plugin
+FROM node:alpine AS canvas
+
+RUN apk update \
+ && apk add --no-cache \
+    ca-certificates \
+    wget \
+    unzip
+
+WORKDIR /
+RUN wget https://github.com/IllumiDesk/jupyter-lti/archive/master.zip -O jupyter-lti.zip
+RUN unzip jupyter-lti.zip
+WORKDIR /jupyter-lti-master
+RUN npm install
+RUN npm run build
+
 FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 
 MAINTAINER 3Blades <contact@3blades.io>
@@ -170,3 +186,9 @@ ENV TEST_DIR /home/tests/
 COPY tests/ /home/tests/
 
 RUN chmod +x /usr/local/bin/start-notebook.sh
+
+RUN wget -O- https://deb.nodesource.com/setup_9.x | bash -
+RUN apt-get install -y nodejs
+
+COPY --from=canvas jupyter-lti-master /jupyter-lti
+RUN jupyter labextension install /jupyter-lti
