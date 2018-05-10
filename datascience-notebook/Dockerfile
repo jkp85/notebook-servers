@@ -43,6 +43,7 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     ca-certificates \
     cmake \
     emacs \
+    python3-distutils \
     fonts-liberation \
     gcc \
     gfortran \
