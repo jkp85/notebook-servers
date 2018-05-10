@@ -11,6 +11,7 @@ RUN apt-get update \
     libopencv-dev \
     python \
     python-dev \
+    python3-distutils \
     python-pip \
     rsync \
     software-properties-common \
