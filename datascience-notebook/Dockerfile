@@ -122,7 +122,7 @@ RUN pip install pytest
 # Install Jupyter Notebook
 RUN pip install --no-cache-dir \
     jupyter \
-    jupyterlab
+    jupyterlab==0.31.12
 
 # Set up kernel for Python2
 RUN python2 -m pip install ipykernel
