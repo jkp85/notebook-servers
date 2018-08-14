@@ -28,9 +28,7 @@ RUN apt-get update \
     && add-apt-repository -y ppa:jonathonf/python-3.6 \
     && apt update -y \
     && apt --assume-yes install -y \
-    python3.6 \
-    && unlink /usr/bin/python3 \
-    && ln -s /usr/bin/python3.6 /usr/bin/python3
+    python3.6
 
 # Install all OS dependencies for notebook server that starts but lacks all
 # features (e.g., download as all possible file formats)
@@ -43,7 +41,7 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     ca-certificates \
     cmake \
     emacs \
-    python3-distutils \
+    python3-pip \
     fonts-liberation \
     gcc \
     gfortran \
@@ -96,6 +94,9 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     wget \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN unlink /usr/bin/python3 \
+    && ln -s /usr/bin/python3.6 /usr/bin/python3
 
 RUN echo 'en_US.UTF-8' > /etc/locale.gen && \
     locale-gen
